@@ -1,0 +1,365 @@
+import mysql.connector as mc
+Pass=input('Enter the password: ')
+con=mc.connect(host='localhost',user='root',password=Pass)
+cur=con.cursor()
+cur.execute('create database if not exists bank')
+cur.execute('use bank')
+#creating tables
+cur.execute('create table if not exists Customer_info(Cust_id int(5) primary key,Name varchar(30),DOB date,Mobile char(10),Customer_since date);')
+cur.execute('create table if not exists Account_info(Account_number int(11),Account_type varchar(16),Cust_id int(5),Balance_cr int(10),Balance_dr int(10),\
+                   PRIMARY KEY (Account_number),FOREIGN KEY (Cust_id) REFERENCES Customer_info(Cust_id) ON DELETE CASCADE ON UPDATE CASCADE);')
+cur.execute('create table if not exists Emp(Emp_id int(5) primary key,Name varchar(30),Post varchar(15),Mobile char(10),Qualification varchar(5),DOJ date,\
+                   Leave_entitled int,Leave_availed int,Leave_balance int as(Leave_entitled-Leave_availed));')
+cur.execute('create table if not exists Emp_details(Emp_id int(5),Mother varchar(20),Father varchar(20),Gender char(1),Marital_status varchar(9),Spouse varchar(20),\
+                   FOREIGN KEY (Emp_id) REFERENCES Emp(Emp_id) ON DELETE CASCADE ON UPDATE CASCADE);')
+
+
+#INSERTING CUSTOMER INFO
+def C_inserting():
+    print('==============================INSERT CUSTOMER INFO==============================')
+    n=int(input('Enter number of records: '))
+    for i in range(n):
+
+        cid=int(input('\nEnter Customer ID: '))
+        name=input('Enter Customer Name: ')
+        dob=input('Date of birth(dd-mm-yyyy): ')
+        mob=input('Enter Mobile: ')
+        C_since=input('Customer Since: ')
+        t=cid,name,dob,mob,C_since
+
+        acc_no=input('Enter Account Number(11-digits): ')
+        acc_type=input('Enter Account Type(sb for saving account, ca for current account, cc, od, la for loan account): ')
+        bal_Cr=int(input('Enter Credit Balance: '))
+        bal_Dr=int(input('Enter Debit Balance: '))
+        t1=acc_no,acc_type,cid,bal_Cr,bal_Dr
+
+        cur.execute('insert into Customer_info values(%s,%s,%s,%s,%s)',t)
+        cur.execute('insert into Account_info values(%s,%s,%s,%s,%s)',t1)
+        cur.execute('commit')
+    print('INFO INSERTED SUCCESSFULLY!')
+
+
+#SEARCHING CUSTOMER INFO
+def C_searching():
+    print('==============================SEARCH CUSTOMER INFO==============================')
+    print('What do want to search?\n[C]ust_id,[N]ame,[M]obile: ')
+    ser=input()
+    if ser.upper()=='C':
+        take_cid=input('Enter the customer ID: ')
+        t=(take_cid+'%',)
+        q='select * from Customer_info,Account_info where Customer_info.Cust_id=Account_info.Cust_id and Customer_info.Cust_id = '+take_cid+';'
+        cur.execute(q)
+        result=cur.fetchall()
+        for i in result:
+            print(i[0],'Name: ',i[1],'\nDOB: ',i[2],'\nMobile: ',i[3],'\nCustomer since: ',i[4],'\nAccount number: ',i[5],'\nAccount type: ',i[6],'\nCredit balance: ',i[8],'\nDebit balance: ',i[9])
+    elif ser.upper()=='N':
+        take_name=input('Enter the Name: ')
+        t=(take_name+'%',)
+        q='select * from Customer_info,Account_info where Customer_info.Cust_id=Account_info.Cust_id and Customer_info.Name like %s'
+        cur.execute(q,t)
+        result=cur.fetchall()
+        for i in result:
+            print(i[0],'Name: ',i[1],'\nDOB: ',i[2],'\nMobile: ',i[3],'\nCustomer since: ',i[4],'\nAccount number: ',i[5],'\nAccount type: ',i[6],'\nCredit balance: ',i[8],'\nDebit balance: ',i[9])
+    elif ser.upper()=='M':
+        take_mob=input('Enter the Mobile: ')
+        t=(take_mob,)
+        q='select * from Customer_info,Account_info where Customer_info.Cust_id=Account_info.Cust_id and Customer_info.mobile = '+take_mob+';'
+        cur.execute(q)
+        result=cur.fetchall()
+        for i in result:
+            print(i[0],'Name: ',i[1],'\nDOB: ',i[2],'\nMobile: ',i[3],'\nCustomer since: ',i[4],'\nAccount number: ',i[5],'\nAccount type: ',i[6],'\nCredit balance: ',i[8],'\nDebit balance: ',i[9])
+
+
+#UPDATING CUSTOMER INFO
+def C_updating():
+    print('==============================UPDATE CUSTOMER INFO==============================')
+    cur.execute('select Cust_id,Name,Mobile from Customer_info;')
+    result=cur.fetchall()
+    for i in result:
+        print(i)
+    upd_id=input('Enter Customer ID to update: ')
+    updfield=int(input('What do you want to update(\n1.Name\n2.DOB\n3.Mobile\n4.Customer since\n5.Account number\n6.Account type\n7.Balance credit\n8.Balance debit\n '))
+    if updfield==1:
+        CName=input('Enter Updated Name: ')
+        t=CName,upd_id
+        q='update Customer_info set Name=%s where Cust_id=%s;'
+        cur.execute(q,t)
+        cur.execute('commit')
+    elif updfield==2:
+        CDOB=input('Enter Updated DOB(dd-mm-yyyy): ')
+        t=CDOB,upd_id
+        q='update Customer_info set DOB=%s where Cust_id=%s;'
+        cur.execute(q,t)
+        cur.execute('commit')
+    elif updfield==3:
+        CMobile=input('Enter Updated Mobile: ')
+        t=CMobile,upd_id
+        q='update Customer_info set Mobile=%s where Cust_id=%s;'
+        cur.execute(q,t)
+        cur.execute('commit')
+    elif updfield==4:
+        CCS=input('Enter Updated Date(dd-mm-yyyy): ')
+        t=CCS,upd_id
+        q='update Customer_info set Customer_since=%s where Cust_id=%s;'
+        cur.execute(q,t)
+        cur.execute('commit')
+    elif updfield==5:
+        CAN=input('Enter Updated Account Number(11-digits): ')
+        t=CAN,upd_id
+        q='update Account_info set Account_number=%s where Cust_id=%s;'
+        cur.execute(q,t)
+        cur.execute('commit')
+    elif updfield==6:
+        CAT=input('Enter Updated Account type(s for saving account, c for current account, cc, od, l for loan account): ')
+        t=CAT,upd_id
+        q='update Account_info set Account_type=%s where Cust_id=%s;'
+        cur.execute(q,t)
+        cur.execute('commit')
+    elif updfield==7:
+        CBC=input('Enter Updated Credit balance: ')
+        t=CBC,upd_id
+        q='update Account_info set Balance_cr=%s where Cust_id=%s;'
+        cur.execute(q,t)
+        cur.execute('commit')
+    elif updfield==8:
+        CBD=input('Enter Updated Debit balance: ')
+        t=CBD,upd_id
+        q='update Account_info set Balance_dr=%s where Cust_id=%s;'
+        cur.execute(q,t)
+        cur.execute('commit')
+    print('\nINFO UPDATED SUCCESSFULLY!')
+
+
+#DELETING CUSTOMER INFO
+def C_deleting():
+    print('==============================DELETE CUSTOMER INFO==============================')
+    del_ask=input('Enter [C]ust_id or [N]ame to delete: ')
+    if del_ask.upper()=='C':
+        del_id=input('Enter Cust_id to delete: ')
+        t=(del_id+'%',)
+        q='delete from Customer_info where Cust_id=%s;'
+        cur.execute(q,t)
+        cur.execute('commit')
+    elif del_ask.upper()=='N':
+        del_name=input('Enter Name to delete: ')
+        t=(del_name+'%',)
+        q='delete from Customer_info where Name like %s;'
+        cur.execute(q,t)
+        cur.execute('commit')
+    print('\nINFO DELETED SUCCESSFULLY')
+
+
+#MENU FOR CUSTOMER        
+def Customer_menu():
+    while 1:
+        print('\n==============================CUSTOMER MENU==============================')
+        print('\n[I]nsert, [S]earch, [U]pdate, [D]elete, [E]xit')
+        ask=input()
+        if ask.upper()=='I':
+            C_inserting()
+        elif ask.upper()=='S':
+            C_searching()
+        elif ask.upper()=='U':
+            C_updating()
+        elif ask.upper()=='D':
+            C_deleting()
+        elif ask.upper()=='E':
+            break
+
+
+#INSERTING EMPLOYEE INFO
+def E_inserting():
+    print('==============================INSERT EMPLOYEE INFO==============================')
+    n=int(input('Enter number of records: '))
+    for i in range(n):
+
+        eid=int(input('\nEnter Employee id: '))
+        ename=input('Enter Employee name: ')
+        post=input('Enter post of employee: ')
+        emob=input('Enter mobile: ')
+        qual=input('Enter employee qualification: ')
+        edoj=input('Date of joining(yyyy-mm-dd): ')
+        LE=input('No. of Leaves entitled: ')
+        LA=input('No. of Leaves availed: ')
+        t=eid,ename,post,emob,qual,edoj,LE,LA
+        cur.execute('insert into Emp (Emp_id,Name,Post,Mobile,Qualification,DOJ,Leave_entitled,Leave_availed) values(%s,%s,%s,%s,%s,%s,%s,%s)',t)
+        cur.execute('commit')
+        
+        mother=input('Employee mother name: ')
+        father=input('Employee father name: ')
+        gen=input('Gender(M/F): ')
+        maritalStat=input('Marital status(M/UM): ')
+        if maritalStat=='M':
+            spouse=input('Spouse name: ')
+        elif maritalStat=='UM':
+            spouse='NA'
+        t1=eid,mother,father,gen,maritalStat,spouse
+        cur.execute('insert into Emp_details values(%s,%s,%s,%s,%s,%s)',t1)
+        cur.execute('commit')
+    print('INFO INSERTED SUCCESSFULLY!')
+
+
+#SEARCHING EMPLOYEE INFO
+def E_searching():
+    print('==============================SEARCH EMPLOYEE INFO==============================')
+    print('What do want to search?\n[E]mp_id,[N]ame,[M]obile: ')
+    ser=input()
+    if ser.upper()=='E':
+        take_eid=input('Enter the Employee id: ')
+        t=(take_eid+'%',)
+        q='select * from Emp,Emp_details where Emp.Emp_id=Emp_details.Emp_id and Emp.Emp_id = %s;'
+        cur.execute(q,t)
+        result=cur.fetchall()
+        for i in result:
+            print(i[0],'Name: ',i[1],'\nPost: ',i[2],'\nMobile: ',i[3],'\nQualification: ',i[4],'\nDOJ: ',i[5],'\nLeaves Entitled: ',i[6],'\nLeaves availed: ',i[7],'\nLeaves balance: ',i[8],'\nMother:',i[10],'\nFather: ',i[11],'\nGender: ',i[12],'\nMarital status: ',i[13],'\nSpouse: ',i[14])
+    elif ser.upper()=='N':
+        take_name=input('Enter the name: ')
+        t=(take_name+'%',)
+        q='select * from Emp,Emp_details where Emp.Emp_id=Emp_details.Emp_id and Emp.Name like %s'
+        cur.execute(q,t)
+        result=cur.fetchall()
+        for i in result:
+            print(i[0],'Name: ',i[1],'\nPost: ',i[2],'\nMobile: ',i[3],'\nQualification: ',i[4],'\nDOJ: ',i[5],'\nLeaves Entitled: ',i[6],'\nLeaves availed: ',i[7],'\nLeaves balance: ',i[8],'\nMother:',i[10],'\nFather: ',i[11],'\nGender: ',i[12],'\nMarital status: ',i[13],'\nSpouse: ',i[14])
+    elif ser.upper()=='M':
+        take_mob=input('Enter the Mobile: ')
+        t=(take_mob+'%',)
+        q='select * from Emp,Emp_details where Emp.Emp_id=Emp_details.Emp_id and Emp.mobile = '+ take_mob+';'
+        cur.execute(q)
+        result=cur.fetchall()
+        for i in result:
+            print(i[0],'Name: ',i[1],'\nPost: ',i[2],'\nMobile: ',i[3],'\nQualification: ',i[4],'\nDOJ: ',i[5],'\nLeaves Entitled: ',i[6],'\nLeaves availed: ',i[7],'\nLeaves balance: ',i[8],'\nMother:',i[10],'\nFather: ',i[11],'\nGender: ',i[12],'\nMarital status: ',i[13],'\nSpouse: ',i[14])
+
+
+#UPDATING EMPLOYEE INFO
+def E_updating():
+    print('==============================UPDATE EMPLOYEE INFO==============================')
+    upd_id=input('Enter Emp_id to update: ')
+    cur.execute('select Emp_id,Name,Mobile from Emp;')
+    result=cur.fetchall()
+    for i in result:
+        print(i)
+    updfield=int(input('What do you want to update(\n1.Name\n2.Post\n3.Mobile\n4.Qualification\n5.DOJ\n6.Leaves entitled\n7.Leaves availed\n8.Mother name\n9.Father name\n10.Gender\n11.Marital status\n12.Spouse name\n'))
+    if updfield==1:
+        EName=input('Enter Updated Name: ')
+        t=EName,upd_id
+        q='update Emp set Name=%s where Emp_id=%s;'
+        cur.execute(q,t)
+        cur.execute('commit')
+    elif updfield==2:
+        epost=input('Enter Updated Post: ')
+        t=epost,upd_id
+        q='update Emp set Post=%s where Emp_id=%s;'
+        cur.execute(q,t)
+        cur.execute('commit')
+    elif updfield==3:
+        EMobile=input('Enter updated Mobile: ')
+        t=EMobile,upd_id
+        q='update Emp set Mobile=%s where Emp_id=%s;'
+        cur.execute(q,t)
+        cur.execute('commit')
+    elif updfield==4:
+        EQual=input('Enter Updated qualification: ')
+        t=EQual,upd_id
+        q='update Emp set Qualification=%s where Emp_id=%s;'
+        cur.execute(q,t)
+        cur.execute('commit')
+    elif updfield==5:
+        eDOJ=input('Enter Updated DOJ(yyyy-mm-dd): ')
+        t=eDOJ,upd_id
+        q='update Emp set DOJ=%s where Emp_id=%s;'
+        cur.execute(q,t)
+        cur.execute('commit')
+    elif updfield==6:
+        le=input('Enter Updated Leave entitled: ')
+        t=le,upd_id
+        q='update Emp set Leave_entitled=%s where Emp_id=%s;'
+        cur.execute(q,t)
+        cur.execute('commit')
+    elif updfield==7:
+        la=input('Enter updated Leave availed: ')
+        t=la,upd_id
+        q='update Emp set Leave_availed=%s where Emp_id=%s;'
+        cur.execute(q,t)
+        cur.execute('commit')
+    elif updfield==8:
+        MN=input('Enter Updated Mother name: ')
+        t=MN,upd_id
+        q='update Emp_details set Mother=%s where Emp_id=%s;'
+        cur.execute(q,t)
+        cur.execute('commit')
+    elif updfield==9:
+        FN=input('Enter Updated Father name: ')
+        t=FN,upd_id
+        q='update Emp_details set Father=%s where Emp_id=%s;'
+        cur.execute(q,t)
+        cur.execute('commit')
+    elif updfield==10:
+        ugen=input('Enter Updated Gender(M/F): ')
+        t=ugen,upd_id
+        q='update Emp_details set Gender=%s where Emp_id=%s;'
+        cur.execute(q,t)
+        cur.execute('commit')
+    elif updfield==11:
+        MS=input('Enter Updated Marital status: ')
+        t=MS,upd_id
+        q='update Emp_details set Marital_status=%s where Emp_id=%s;'
+        cur.execute(q,t)
+        cur.execute('commit')
+    elif updfield==12:
+        ES=input('Enter Updated Spouse detail: ')
+        t=ES,upd_id
+        q='update Emp_details set Spouse=%s where Emp_id=%s;'
+        cur.execute(q,t)
+        cur.execute('commit')
+    print('\nINFO UPDATED SUCCESSFULLY!')
+
+
+#DELETING EMPLOYEE INFO 
+def E_deleting():
+    print('==============================DELETE EMPLOYEE INFO==============================')
+    del_ask=input('Enter [E]mp_id or [N]ame to delete: ')
+    if del_ask.upper()=='E':
+        del_id=input('Enter Emp_id to delete: ')
+        t=(del_id,)
+        q='delete from Emp where Emp_id=%s;'
+        cur.execute(q,t)
+        cur.execute('commit')
+    elif del_ask.upper()=='N':
+        del_name=input('Enter Name to delete: ')
+        t=(del_name+'%',)
+        q='delete from Emp where Name=%s;'
+        cur.execute(q,t)
+        cur.execute('commit')
+    print('\nINFO DELETED SUCCESSFULLY')
+
+
+#MENU FOR EMPLOYEE
+def Employee_menu():
+    while 1:
+        print('\n==============================EMPLOYEE MENU==============================')
+        print('\n[I]nsert, [S]earch, [U]pdate, [D]elete, [E]xit')
+        ask=input()
+        if ask.upper()=='I':
+            E_inserting()
+        elif ask.upper()=='S':
+            E_searching()
+        elif ask.upper()=='U':
+            E_updating()
+        elif ask.upper()=='D':
+            E_deleting()
+        elif ask.upper()=='E':
+            break
+
+
+#MAIN MENU
+while True:
+    print('\n==============================MAIN MENU==============================')
+    ask=input('[C]ustomer Menu , [E]mployee Menu ,[I]nformation Analysis, [Q]uit: ')
+    if ask.upper()=='C':
+        Customer_menu()
+    elif ask.upper()=='E':
+        Employee_menu()
+    elif ask.upper()=='Q':
+        print('Thanks for using BANK MANAGEMENT SYSTEM.')
+        print('Made by *****ABHINAV GUPTA*****')
+        break
