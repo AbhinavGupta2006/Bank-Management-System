@@ -5,12 +5,12 @@ cur=con.cursor()
 cur.execute('create database if not exists bank')
 cur.execute('use bank')
 #creating tables
-cur.execute('create table if not exists Customer_info(Cust_id int(5) primary key,Name varchar(30),DOB date,Mobile char(10),Customer_since date);')
+cur.execute('create table if not exists Customer_info(Cust_id int(5) primary key,Name varchar(50),DOB date,Gender char(1),Mobile char(10),Customer_since date);')
 cur.execute('create table if not exists Account_info(Account_number bigint(12),Account_type varchar(16),Cust_id int(5),Balance_cr int(10),Balance_dr int(10),\
                    PRIMARY KEY (Account_number),FOREIGN KEY (Cust_id) REFERENCES Customer_info(Cust_id) ON DELETE CASCADE ON UPDATE CASCADE);')
-cur.execute('create table if not exists Emp(Emp_id int(5) primary key,Name varchar(30),Post varchar(15),Mobile char(10),Qualification varchar(20),DOJ date,\
+cur.execute('create table if not exists Emp(Emp_id int(5) primary key,Name varchar(50),Post varchar(25),Mobile char(10),Qualification varchar(20),DOJ date,\
                    Leave_entitled int,Leave_availed int,Leave_balance int as(Leave_entitled-Leave_availed));')
-cur.execute('create table if not exists Emp_details(Emp_id int(5),Mother varchar(20),Father varchar(20),Gender char(1),Marital_status varchar(9),Spouse varchar(20),\
+cur.execute('create table if not exists Emp_details(Emp_id int(5),Mother varchar(40),Father varchar(40),Gender char(1),Marital_status varchar(2),Spouse varchar(40),\
                    FOREIGN KEY (Emp_id) REFERENCES Emp(Emp_id) ON DELETE CASCADE ON UPDATE CASCADE);')
 
 
@@ -23,9 +23,10 @@ def C_inserting():
         cid=int(input('\nEnter Customer ID: '))
         name=input('Enter Customer Name: ')
         dob=input('Date of birth(dd-mm-yyyy): ')
+        gen=input('Enter Customer Gender(M/F): ')
         mob=input('Enter Mobile: ')
         C_since=input('Customer Since(dd-mm-yyyy): ')
-        t=cid,name,dob,mob,C_since
+        t=cid,name,dob,gen,mob,C_since
 
         acc_no=input('Enter Account Number(11-digits): ')
         acc_type=input('Enter Account Type(sb for saving account, ca for current account, cc, od, la for loan account): ')
@@ -33,7 +34,7 @@ def C_inserting():
         bal_Dr=int(input('Enter Debit Balance: '))
         t1=acc_no,acc_type,cid,bal_Cr,bal_Dr
 
-        cur.execute('insert into Customer_info values(%s,%s,STR_TO_DATE(%s,"%d-%m-%Y"),%s,STR_TO_DATE(%s,"%d-%m-%Y"))',t)
+        cur.execute('insert into Customer_info values(%s,%s,STR_TO_DATE(%s,"%d-%m-%Y"),%s,%s,STR_TO_DATE(%s,"%d-%m-%Y"))',t)
         cur.execute('insert into Account_info values(%s,%s,%s,%s,%s)',t1)
         cur.execute('commit')
     print('INFO INSERTED SUCCESSFULLY!')
@@ -51,7 +52,7 @@ def C_searching():
         cur.execute(q,t)
         result=cur.fetchall()
         for i in result:
-            print('Cust_ID: ',i[0],'\nName: ',i[1],'\nDOB: ',i[-2],'\nMobile: ',i[3],'\nCustomer since: ',i[-1],'\nAccount number: ',i[5],'\nAccount type: ',i[6],'\nCredit balance: ',i[8],'\nDebit balance: ',i[9])
+            print('Cust_ID: ',i[0],'\nName: ',i[1],'\nDOB: ',i[-2],'\nGender: ',i[3],'\nMobile: ',i[4],'\nCustomer since: ',i[-1],'\nAccount number: ',i[6],'\nAccount type: ',i[7],'\nCredit balance: ',i[9],'\nDebit balance: ',i[10])
     elif ser.upper()=='N':
         take_name=input('Enter the Name: ')
         t=(take_name+'%',)
@@ -59,7 +60,7 @@ def C_searching():
         cur.execute(q,t)
         result=cur.fetchall()
         for i in result:
-            print('Cust_ID: ',i[0],'\nName: ',i[1],'\nDOB: ',i[-2],'\nMobile: ',i[3],'\nCustomer since: ',i[-1],'\nAccount number: ',i[5],'\nAccount type: ',i[6],'\nCredit balance: ',i[8],'\nDebit balance: ',i[9])
+            print('Cust_ID: ',i[0],'\nName: ',i[1],'\nDOB: ',i[-2],'\nGender: ',i[3],'\nMobile: ',i[4],'\nCustomer since: ',i[-1],'\nAccount number: ',i[6],'\nAccount type: ',i[7],'\nCredit balance: ',i[9],'\nDebit balance: ',i[10])
     elif ser.upper()=='M':
         take_mob=input('Enter the Mobile: ')
         t=(take_mob,)
@@ -67,7 +68,7 @@ def C_searching():
         cur.execute(q,t)
         result=cur.fetchall()
         for i in result:
-            print('Cust_ID: ',i[0],'\nName: ',i[1],'\nDOB: ',i[-2],'\nMobile: ',i[3],'\nCustomer since: ',i[-1],'\nAccount number: ',i[5],'\nAccount type: ',i[6],'\nCredit balance: ',i[8],'\nDebit balance: ',i[9])
+            print('Cust_ID: ',i[0],'\nName: ',i[1],'\nDOB: ',i[-2],'\nGender: ',i[3],'\nMobile: ',i[4],'\nCustomer since: ',i[-1],'\nAccount number: ',i[6],'\nAccount type: ',i[7],'\nCredit balance: ',i[9],'\nDebit balance: ',i[10])
 
 
 #UPDATING CUSTOMER INFO
@@ -78,7 +79,7 @@ def C_updating():
     for i in result:
         print(i)
     upd_id=input('Enter Customer ID to update: ')
-    updfield=int(input('What do you want to update(\n1.Name\n2.DOB\n3.Mobile\n4.Customer since\n5.Account number\n6.Account type\n7.Balance credit\n8.Balance debit\n '))
+    updfield=int(input('What do you want to update(\n1.Name\n2.DOB\n3.Gender\n4.Mobile\n5.Customer since\n6.Account number\n7.Account type\n8.Balance credit\n9.Balance debit\n '))
     if updfield==1:
         CName=input('Enter Updated Name: ')
         t=CName,upd_id
@@ -92,36 +93,42 @@ def C_updating():
         cur.execute(q,t)
         cur.execute('commit')
     elif updfield==3:
+        CG=input('Enter Updated Gender(M/F): ')
+        t=CG,upd_id
+        q='update Customer_info set Gender=%s where Cust_id=%s;'
+        cur.execute(q,t)
+        cur.execute('commit')
+    elif updfield==4:
         CMobile=input('Enter Updated Mobile: ')
         t=CMobile,upd_id
         q='update Customer_info set Mobile=%s where Cust_id=%s;'
         cur.execute(q,t)
         cur.execute('commit')
-    elif updfield==4:
+    elif updfield==5:
         CCS=input('Enter Customer Since Date(dd-mm-yyyy): ')
         t=CCS,upd_id
         q='update Customer_info set Customer_since=STR_TO_DATE(%s,"%d-%m-%Y") where Cust_id=%s;'
         cur.execute(q,t)
         cur.execute('commit')
-    elif updfield==5:
+    elif updfield==6:
         CAN=input('Enter Updated Account Number(11-digits): ')
         t=CAN,upd_id
         q='update Account_info set Account_number=%s where Cust_id=%s;'
         cur.execute(q,t)
         cur.execute('commit')
-    elif updfield==6:
+    elif updfield==7:
         CAT=input('Enter Updated Account type(s for saving account, c for current account, cc, od, l for loan account): ')
         t=CAT,upd_id
         q='update Account_info set Account_type=%s where Cust_id=%s;'
         cur.execute(q,t)
         cur.execute('commit')
-    elif updfield==7:
+    elif updfield==8:
         CBC=input('Enter Updated Credit balance: ')
         t=CBC,upd_id
         q='update Account_info set Balance_cr=%s where Cust_id=%s;'
         cur.execute(q,t)
         cur.execute('commit')
-    elif updfield==8:
+    elif updfield==9:
         CBD=input('Enter Updated Debit balance: ')
         t=CBD,upd_id
         q='update Account_info set Balance_dr=%s where Cust_id=%s;'
@@ -238,7 +245,7 @@ def E_updating():
     for i in result:
         print(i)
     upd_id=input('Enter Emp_id to update: ')
-    updfield=int(input('What do you want to update(\n1.Name\n2.Post\n3.Mobile\n4.Qualification\n5.DOJ\n6.Leaves entitled\n7.Leaves availed\n8.Mother name\n9.Father name\n10.Gender\n11.Marital status\n12.Spouse name\n'))
+    updfield=int(input('What do you want to update(\n1.Name\n2.Post\n3.Mobile\n4.Qualification\n5.DOJ\n6.Leaves Entitled\n7.Leaves Availed\n8.Mother Name\n9.Father Name\n10.Gender\n11.Marital Status\n12.Spouse Name\n'))
     if updfield==1:
         EName=input('Enter Updated Name: ')
         t=EName,upd_id
@@ -301,12 +308,17 @@ def E_updating():
         cur.execute('commit')
     elif updfield==11:
         MS=input('Enter Updated Marital status: ')
+        if MS=='M':
+            ES=input('Enter Spouse Name: ')
         t=MS,upd_id
         q='update Emp_details set Marital_status=%s where Emp_id=%s;'
         cur.execute(q,t)
+        t1=ES,upd_id
+        q1='update Emp_details set Spouse=%s where Emp_id=%s'
+        cur.execute(q1,t1)
         cur.execute('commit')
     elif updfield==12:
-        ES=input('Enter Updated Spouse detail: ')
+        ES=input('Enter Updated Spouse Name: ')
         t=ES,upd_id
         q='update Emp_details set Spouse=%s where Emp_id=%s;'
         cur.execute(q,t)
