@@ -14,6 +14,14 @@ cur.execute('create table if not exists Emp_details(Emp_id int(5),Mother varchar
                    FOREIGN KEY (Emp_id) REFERENCES Emp(Emp_id) ON DELETE CASCADE ON UPDATE CASCADE);')
 
 
+#VIEWING CUSTOMER INFO
+def C_View():
+    cur.execute('select *,DATE_FORMAT(DOB,"%d-%m-%Y") as DOB,DATE_FORMAT(Customer_since,"%d-%m-%Y") as Customer_since from Customer_info,Account_info where Customer_info.Cust_id=Account_info.Cust_id;')
+    result=cur.fetchall()
+    for i in result:
+        print('\nCust_ID: ',i[0],'\nName: ',i[1],'\nDOB: ',i[-2],'\nGender: ',i[3],'\nMobile: ',i[4],'\nCustomer since: ',i[-1],'\nAccount number: ',i[6],'\nAccount type: ',i[7],'\nCredit balance: ',i[9],'\nDebit balance: ',i[10])
+
+
 #INSERTING CUSTOMER INFO
 def C_inserting():
     print('==============================INSERT CUSTOMER INFO==============================')
@@ -160,9 +168,11 @@ def C_deleting():
 def Customer_menu():
     while 1:
         print('\n==============================CUSTOMER MENU==============================')
-        print('\n[I]nsert, [S]earch, [U]pdate, [D]elete, [E]xit')
+        print('\n[V]iew, [I]nsert, [S]earch, [U]pdate, [D]elete, [E]xit')
         ask=input()
-        if ask.upper()=='I':
+        if ask.upper()=='V':
+            C_View()
+        elif ask.upper()=='I':
             C_inserting()
         elif ask.upper()=='S':
             C_searching()
@@ -172,6 +182,14 @@ def Customer_menu():
             C_deleting()
         elif ask.upper()=='E':
             break
+
+
+#VIEWING EMPLOYEE INFO
+def E_View():
+    cur.execute('select *,DATE_FORMAT(DOJ,"%d-%m-%Y") as DOJ from Emp,Emp_details where Emp.Emp_id=Emp_details.Emp_id;')
+    result=cur.fetchall()
+    for i in result:
+        print('\nEmp_ID: ',i[0],'\nName: ',i[1],'\nPost: ',i[2],'\nMobile: ',i[3],'\nQualification: ',i[4],'\nDOJ: ',i[-1],'\nLeaves Entitled: ',i[6],'\nLeaves Availed: ',i[7],'\nLeaves Balance: ',i[8],'\nMother:',i[10],'\nFather: ',i[11],'\nGender: ',i[12],'\nMarital Status: ',i[13],'\nSpouse: ',i[14])
 
 
 #INSERTING EMPLOYEE INFO
@@ -349,9 +367,11 @@ def E_deleting():
 def Employee_menu():
     while 1:
         print('\n==============================EMPLOYEE MENU==============================')
-        print('\n[I]nsert, [S]earch, [U]pdate, [D]elete, [E]xit')
+        print('\n[V]iew, [I]nsert, [S]earch, [U]pdate, [D]elete, [E]xit')
         ask=input()
-        if ask.upper()=='I':
+        if ask.upper()=='V':
+            E_View()
+        elif ask.upper()=='I':
             E_inserting()
         elif ask.upper()=='S':
             E_searching()
