@@ -17,10 +17,12 @@ cur.execute('create table if not exists Emp_details(Emp_id int(5),Mother varchar
 #VIEWING CUSTOMER INFO
 def C_View():
     print('\n==============================VIEWING CUSTOMER INFO==============================\n')
-    cur.execute('select *,DATE_FORMAT(DOB,"%d-%m-%Y") as DOB,DATE_FORMAT(Customer_since,"%d-%m-%Y") as Customer_since from Customer_info,Account_info where Customer_info.Cust_id=Account_info.Cust_id;')
+    cur.execute('select *,DATE_FORMAT(DOB,"%d-%m-%Y") as DOB,DATE_FORMAT(Customer_since,"%d-%m-%Y") as Customer_since from Customer_info,\
+                      Account_info where Customer_info.Cust_id=Account_info.Cust_id;')
     result=cur.fetchall()
     for i in result:
-        print('\nCust_ID: ',i[0],'\nName: ',i[1],'\nDOB: ',i[-2],'\nGender: ',i[3],'\nMobile: ',i[4],'\nCustomer since: ',i[-1],'\nAccount number: ',i[6],'\nAccount type: ',i[7],'\nCredit balance: ',i[9],'\nDebit balance: ',i[10])
+        print('\nCust_ID: ',i[0],'\nName: ',i[1],'\nDOB: ',i[-2],'\nGender: ',i[3],'\nMobile: ',i[4],'\nCustomer since: ',i[-1],'\nAccount number: ',i[6],'\nAccount type: ',
+                i[7],'\nCredit balance: ',i[9],'\nDebit balance: ',i[10])
 
 
 #INSERTING CUSTOMER INFO
@@ -62,7 +64,8 @@ def C_searching():
         cur.execute(q,t)
         result=cur.fetchall()
         for i in result:
-            print('\nCust_ID: ',i[0],'\nName: ',i[1],'\nDOB: ',i[-2],'\nGender: ',i[3],'\nMobile: ',i[4],'\nCustomer since: ',i[-1],'\nAccount number: ',i[6],'\nAccount type: ',i[7],'\nCredit balance: ',i[9],'\nDebit balance: ',i[10])
+            print('\nCust_ID: ',i[0],'\nName: ',i[1],'\nDOB: ',i[-2],'\nGender: ',i[3],'\nMobile: ',i[4],'\nCustomer since: ',i[-1],'\nAccount number: ',i[6],'\nAccount type: ',
+                     i[7],'\nCredit balance: ',i[9],'\nDebit balance: ',i[10])
     elif ser.upper()=='N':
         take_name=input('Enter the Name: ')
         t=(take_name+'%',)
@@ -71,7 +74,8 @@ def C_searching():
         cur.execute(q,t)
         result=cur.fetchall()
         for i in result:
-            print('\nCust_ID: ',i[0],'\nName: ',i[1],'\nDOB: ',i[-2],'\nGender: ',i[3],'\nMobile: ',i[4],'\nCustomer since: ',i[-1],'\nAccount number: ',i[6],'\nAccount type: ',i[7],'\nCredit balance: ',i[9],'\nDebit balance: ',i[10])
+            print('\nCust_ID: ',i[0],'\nName: ',i[1],'\nDOB: ',i[-2],'\nGender: ',i[3],'\nMobile: ',i[4],'\nCustomer since: ',i[-1],'\nAccount number: ',i[6],'\nAccount type: ',
+                     i[7],'\nCredit balance: ',i[9],'\nDebit balance: ',i[10])
     elif ser.upper()=='M':
         take_mob=input('Enter the Mobile: ')
         t=(take_mob,)
@@ -80,7 +84,8 @@ def C_searching():
         cur.execute(q,t)
         result=cur.fetchall()
         for i in result:
-            print('\nCust_ID: ',i[0],'\nName: ',i[1],'\nDOB: ',i[-2],'\nGender: ',i[3],'\nMobile: ',i[4],'\nCustomer since: ',i[-1],'\nAccount number: ',i[6],'\nAccount type: ',i[7],'\nCredit balance: ',i[9],'\nDebit balance: ',i[10])
+            print('\nCust_ID: ',i[0],'\nName: ',i[1],'\nDOB: ',i[-2],'\nGender: ',i[3],'\nMobile: ',i[4],'\nCustomer since: ',i[-1],'\nAccount number: ',i[6],'\nAccount type: ',
+                     i[7],'\nCredit balance: ',i[9],'\nDebit balance: ',i[10])
 
 
 #UPDATING CUSTOMER INFO
