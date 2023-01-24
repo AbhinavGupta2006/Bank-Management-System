@@ -1,3 +1,4 @@
+#Connecting with MySQL
 import mysql.connector as mc
 Pass=input('Enter MySQL password: ')
 con=mc.connect(host='localhost',user='root',password=Pass)
@@ -96,7 +97,8 @@ def C_updating():
     for i in result:
         print(i)
     upd_id=input('Enter Customer ID to update: ')
-    updfield=int(input('What do you want to update\n1.Name\n2.DOB\n3.Gender\n4.Mobile\n5.Customer Since\n6.Account Number\n7.Account Type\n8.Balance Credit\n9.Balance Debit\n '))
+    updfield=int(input('What do you want to update\n1.Name\n2.DOB\n3.Gender\n4.Mobile\n5.Customer Since\
+                                   \n6.Account Number\n7.Account Type\n8.Balance Credit\n9.Balance Debit\n '))
     if updfield==1:
         CName=input('Enter Updated Name: ')
         t=CName,upd_id
@@ -201,14 +203,11 @@ def E_View():
     for i in result:
         print('\nEmp_ID: ',i[0],'\nName: ',i[1],'\nPost: ',i[2],'\nMobile: ',i[3],'\nQualification: ',i[4],'\nDOJ: ',i[-1],'\nLeaves Entitled: ',i[6],'\nLeaves Availed: ',
                   i[7],'\nLeaves Balance: ',i[8],'\nMother:',i[10],'\nFather: ',i[11],'\nGender: ',i[12],'\nMarital Status: ',i[13],'\nSpouse: ',i[14])
-
-
 #INSERTING EMPLOYEE INFO
 def E_inserting():
     print('\n==============================INSERT EMPLOYEE INFO==============================\n')
     n=int(input('Enter Number of Records: '))
     for i in range(n):
-
         eid=int(input('\nEnter Employee ID: '))
         ename=input('Enter Employee Name: ')
         post=input('Enter Post of Employee: ')
@@ -220,7 +219,6 @@ def E_inserting():
         t=eid,ename,post,emob,qual,edoj,LE,LA
         cur.execute('insert into Emp (Emp_id,Name,Post,Mobile,Qualification,DOJ,Leave_entitled,Leave_availed) values(%s,%s,%s,%s,%s,STR_TO_DATE(%s,"%d-%m-%Y"),%s,%s)',t)
         cur.execute('commit')
-        
         mother=input('Employee Mother Name: ')
         father=input('Employee Father Name: ')
         gen=input('Gender(M/F): ')
@@ -372,18 +370,15 @@ def E_deleting():
     elif del_ask.upper()=='N':
         del_name=input('Enter Name to Delete: ')
         t=(del_name+'%',)
-        q='delete from Emp where Name=%s;'
+        q='delete from Emp where Name like %s;'
         cur.execute(q,t)
         cur.execute('commit')
     print('\nINFO DELETED SUCCESSFULLY')
-
-
 #MENU FOR EMPLOYEE
 def Employee_menu():
     while 1:
         print('\n==============================EMPLOYEE MENU==============================\n')
-        print('[V]iew, [I]nsert, [S]earch, [U]pdate, [D]elete, [E]xit')
-        ask=input()
+        ask=input('[V]iew, [I]nsert, [S]earch, [U]pdate, [D]elete, [E]xit\n')
         if ask.upper()=='V':
             E_View()
         elif ask.upper()=='I':
@@ -401,7 +396,7 @@ def Employee_menu():
 #MAIN MENU
 while True:
     print('\n==============================MAIN MENU==============================\n')
-    ask=input('[C]ustomer Menu , [E]mployee Menu ,[I]nformation Analysis, [Q]uit: ')
+    ask=input('[C]ustomer Menu , [E]mployee Menu , [Q]uit\n ')
     if ask.upper()=='C':
         Customer_menu()
     elif ask.upper()=='E':
