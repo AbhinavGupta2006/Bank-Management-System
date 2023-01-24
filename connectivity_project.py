@@ -57,27 +57,30 @@ def C_searching():
     if ser.upper()=='C':
         take_cid=input('Enter the customer ID: ')
         t=(take_cid,)
-        q='select *,DATE_FORMAT(DOB,"%d-%m-%Y") as DOB, DATE_FORMAT(Customer_since,"%d-%m-%Y") as Customer_since from Customer_info,Account_info where Customer_info.Cust_id=Account_info.Cust_id and Customer_info.Cust_id = %s ;'
+        q='select *,DATE_FORMAT(DOB,"%d-%m-%Y") as DOB, DATE_FORMAT(Customer_since,"%d-%m-%Y") as Customer_since from Customer_info,Account_info \
+             where Customer_info.Cust_id=Account_info.Cust_id and Customer_info.Cust_id = %s ;'
         cur.execute(q,t)
         result=cur.fetchall()
         for i in result:
-            print('Cust_ID: ',i[0],'\nName: ',i[1],'\nDOB: ',i[-2],'\nGender: ',i[3],'\nMobile: ',i[4],'\nCustomer since: ',i[-1],'\nAccount number: ',i[6],'\nAccount type: ',i[7],'\nCredit balance: ',i[9],'\nDebit balance: ',i[10])
+            print('\nCust_ID: ',i[0],'\nName: ',i[1],'\nDOB: ',i[-2],'\nGender: ',i[3],'\nMobile: ',i[4],'\nCustomer since: ',i[-1],'\nAccount number: ',i[6],'\nAccount type: ',i[7],'\nCredit balance: ',i[9],'\nDebit balance: ',i[10])
     elif ser.upper()=='N':
         take_name=input('Enter the Name: ')
         t=(take_name+'%',)
-        q='select *,DATE_FORMAT(DOB,"%d-%m-%Y") as DOB, DATE_FORMAT(Customer_since,"%d-%m-%Y") as Customer_since from Customer_info,Account_info where Customer_info.Cust_id=Account_info.Cust_id and Customer_info.Name like %s ;'
+        q='select *,DATE_FORMAT(DOB,"%d-%m-%Y") as DOB, DATE_FORMAT(Customer_since,"%d-%m-%Y") as Customer_since from Customer_info,Account_info \
+             where Customer_info.Cust_id=Account_info.Cust_id and Customer_info.Name like %s ;'
         cur.execute(q,t)
         result=cur.fetchall()
         for i in result:
-            print('Cust_ID: ',i[0],'\nName: ',i[1],'\nDOB: ',i[-2],'\nGender: ',i[3],'\nMobile: ',i[4],'\nCustomer since: ',i[-1],'\nAccount number: ',i[6],'\nAccount type: ',i[7],'\nCredit balance: ',i[9],'\nDebit balance: ',i[10])
+            print('\nCust_ID: ',i[0],'\nName: ',i[1],'\nDOB: ',i[-2],'\nGender: ',i[3],'\nMobile: ',i[4],'\nCustomer since: ',i[-1],'\nAccount number: ',i[6],'\nAccount type: ',i[7],'\nCredit balance: ',i[9],'\nDebit balance: ',i[10])
     elif ser.upper()=='M':
         take_mob=input('Enter the Mobile: ')
         t=(take_mob,)
-        q='select *,DATE_FORMAT(DOB,"%d-%m-%Y") as DOB, DATE_FORMAT(Customer_since,"%d-%m-%Y") as Customer_since from Customer_info,Account_info where Customer_info.Cust_id=Account_info.Cust_id and Customer_info.Mobile = %s ;'
+        q='select *,DATE_FORMAT(DOB,"%d-%m-%Y") as DOB, DATE_FORMAT(Customer_since,"%d-%m-%Y") as Customer_since from Customer_info,Account_info \
+             where Customer_info.Cust_id=Account_info.Cust_id and Customer_info.Mobile = %s ;'
         cur.execute(q,t)
         result=cur.fetchall()
         for i in result:
-            print('Cust_ID: ',i[0],'\nName: ',i[1],'\nDOB: ',i[-2],'\nGender: ',i[3],'\nMobile: ',i[4],'\nCustomer since: ',i[-1],'\nAccount number: ',i[6],'\nAccount type: ',i[7],'\nCredit balance: ',i[9],'\nDebit balance: ',i[10])
+            print('\nCust_ID: ',i[0],'\nName: ',i[1],'\nDOB: ',i[-2],'\nGender: ',i[3],'\nMobile: ',i[4],'\nCustomer since: ',i[-1],'\nAccount number: ',i[6],'\nAccount type: ',i[7],'\nCredit balance: ',i[9],'\nDebit balance: ',i[10])
 
 
 #UPDATING CUSTOMER INFO
@@ -88,7 +91,7 @@ def C_updating():
     for i in result:
         print(i)
     upd_id=input('Enter Customer ID to update: ')
-    updfield=int(input('What do you want to update(\n1.Name\n2.DOB\n3.Gender\n4.Mobile\n5.Customer Since\n6.Account Number\n7.Account Type\n8.Balance Credit\n9.Balance Debit\n '))
+    updfield=int(input('What do you want to update\n1.Name\n2.DOB\n3.Gender\n4.Mobile\n5.Customer Since\n6.Account Number\n7.Account Type\n8.Balance Credit\n9.Balance Debit\n '))
     if updfield==1:
         CName=input('Enter Updated Name: ')
         t=CName,upd_id
@@ -191,7 +194,8 @@ def E_View():
     cur.execute('select *,DATE_FORMAT(DOJ,"%d-%m-%Y") as DOJ from Emp,Emp_details where Emp.Emp_id=Emp_details.Emp_id;')
     result=cur.fetchall()
     for i in result:
-        print('\nEmp_ID: ',i[0],'\nName: ',i[1],'\nPost: ',i[2],'\nMobile: ',i[3],'\nQualification: ',i[4],'\nDOJ: ',i[-1],'\nLeaves Entitled: ',i[6],'\nLeaves Availed: ',i[7],'\nLeaves Balance: ',i[8],'\nMother:',i[10],'\nFather: ',i[11],'\nGender: ',i[12],'\nMarital Status: ',i[13],'\nSpouse: ',i[14])
+        print('\nEmp_ID: ',i[0],'\nName: ',i[1],'\nPost: ',i[2],'\nMobile: ',i[3],'\nQualification: ',i[4],'\nDOJ: ',i[-1],'\nLeaves Entitled: ',i[6],'\nLeaves Availed: ',
+                  i[7],'\nLeaves Balance: ',i[8],'\nMother:',i[10],'\nFather: ',i[11],'\nGender: ',i[12],'\nMarital Status: ',i[13],'\nSpouse: ',i[14])
 
 
 #INSERTING EMPLOYEE INFO
@@ -238,7 +242,8 @@ def E_searching():
         cur.execute(q,t)
         result=cur.fetchall()
         for i in result:
-            print('Emp_ID: ',i[0],'\nName: ',i[1],'\nPost: ',i[2],'\nMobile: ',i[3],'\nQualification: ',i[4],'\nDOJ: ',i[-1],'\nLeaves Entitled: ',i[6],'\nLeaves Availed: ',i[7],'\nLeaves Balance: ',i[8],'\nMother:',i[10],'\nFather: ',i[11],'\nGender: ',i[12],'\nMarital Status: ',i[13],'\nSpouse: ',i[14])
+            print('\nEmp_ID: ',i[0],'\nName: ',i[1],'\nPost: ',i[2],'\nMobile: ',i[3],'\nQualification: ',i[4],'\nDOJ: ',i[-1],'\nLeaves Entitled: ',i[6],'\nLeaves Availed: ',
+                      i[7],'\nLeaves Balance: ',i[8],'\nMother:',i[10],'\nFather: ',i[11],'\nGender: ',i[12],'\nMarital Status: ',i[13],'\nSpouse: ',i[14])
     elif ser.upper()=='N':
         take_name=input('Enter Name: ')
         t=(take_name+'%',)
@@ -246,7 +251,8 @@ def E_searching():
         cur.execute(q,t)
         result=cur.fetchall()
         for i in result:
-            print('Emp_ID: ',i[0],'\nName: ',i[1],'\nPost: ',i[2],'\nMobile: ',i[3],'\nQualification: ',i[4],'\nDOJ: ',i[-1],'\nLeaves Entitled: ',i[6],'\nLeaves Availed: ',i[7],'\nLeaves Balance: ',i[8],'\nMother:',i[10],'\nFather: ',i[11],'\nGender: ',i[12],'\nMarital Status: ',i[13],'\nSpouse: ',i[14])
+            print('\nEmp_ID: ',i[0],'\nName: ',i[1],'\nPost: ',i[2],'\nMobile: ',i[3],'\nQualification: ',i[4],'\nDOJ: ',i[-1],'\nLeaves Entitled: ',i[6],'\nLeaves Availed: ',
+                      i[7],'\nLeaves Balance: ',i[8],'\nMother:',i[10],'\nFather: ',i[11],'\nGender: ',i[12],'\nMarital Status: ',i[13],'\nSpouse: ',i[14])
     elif ser.upper()=='M':
         take_mob=input('Enter Mobile: ')
         t=(take_mob,)
@@ -254,7 +260,8 @@ def E_searching():
         cur.execute(q,t)
         result=cur.fetchall()
         for i in result:
-            print('Emp_ID: ',i[0],'\nName: ',i[1],'\nPost: ',i[2],'\nMobile: ',i[3],'\nQualification: ',i[4],'\nDOJ: ',i[-1],'\nLeaves Entitled: ',i[6],'\nLeaves Availed: ',i[7],'\nLeaves Balance: ',i[8],'\nMother:',i[10],'\nFather: ',i[11],'\nGender: ',i[12],'\nMarital Status: ',i[13],'\nSpouse: ',i[14])
+            print('\nEmp_ID: ',i[0],'\nName: ',i[1],'\nPost: ',i[2],'\nMobile: ',i[3],'\nQualification: ',i[4],'\nDOJ: ',i[-1],'\nLeaves Entitled: ',i[6],'\nLeaves Availed: ',
+                      i[7],'\nLeaves Balance: ',i[8],'\nMother:',i[10],'\nFather: ',i[11],'\nGender: ',i[12],'\nMarital Status: ',i[13],'\nSpouse: ',i[14])
 
 
 #UPDATING EMPLOYEE INFO
@@ -265,7 +272,8 @@ def E_updating():
     for i in result:
         print(i)
     upd_id=input('Enter Emp_id to Update: ')
-    updfield=int(input('What do you want to update(\n1.Name\n2.Post\n3.Mobile\n4.Qualification\n5.DOJ\n6.Leaves Entitled\n7.Leaves Availed\n8.Mother Name\n9.Father Name\n10.Gender\n11.Marital Status\n12.Spouse Name\n'))
+    updfield=int(input('What do you want to update\n1.Name\n2.Post\n3.Mobile\n4.Qualification\n5.DOJ\n6.Leaves Entitled\n7.Leaves Availed\
+                                \n8.Mother Name\n9.Father Name\n10.Gender\n11.Marital Status\n12.Spouse Name\n'))
     if updfield==1:
         EName=input('Enter Updated Name: ')
         t=EName,upd_id
