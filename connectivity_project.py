@@ -17,7 +17,7 @@ cur.execute('create table if not exists Emp_details(Emp_id int(5),Mother varchar
 #INSERTING CUSTOMER INFO
 def C_inserting():
     print('==============================INSERT CUSTOMER INFO==============================')
-    n=int(input('Enter number of records: '))
+    n=int(input('Enter Number of Records: '))
     for i in range(n):
 
         cid=int(input('\nEnter Customer ID: '))
@@ -43,7 +43,7 @@ def C_inserting():
 #SEARCHING CUSTOMER INFO
 def C_searching():
     print('==============================SEARCH CUSTOMER INFO==============================')
-    print('What do want to search?\n[C]ust_id,[N]ame,[M]obile: ')
+    print('What do want to search with?\n[C]ust_id,[N]ame,[M]obile: ')
     ser=input()
     if ser.upper()=='C':
         take_cid=input('Enter the customer ID: ')
@@ -79,7 +79,7 @@ def C_updating():
     for i in result:
         print(i)
     upd_id=input('Enter Customer ID to update: ')
-    updfield=int(input('What do you want to update(\n1.Name\n2.DOB\n3.Gender\n4.Mobile\n5.Customer since\n6.Account number\n7.Account type\n8.Balance credit\n9.Balance debit\n '))
+    updfield=int(input('What do you want to update(\n1.Name\n2.DOB\n3.Gender\n4.Mobile\n5.Customer Since\n6.Account Number\n7.Account Type\n8.Balance Credit\n9.Balance Debit\n '))
     if updfield==1:
         CName=input('Enter Updated Name: ')
         t=CName,upd_id
@@ -117,19 +117,19 @@ def C_updating():
         cur.execute(q,t)
         cur.execute('commit')
     elif updfield==7:
-        CAT=input('Enter Updated Account type(s for saving account, c for current account, cc, od, l for loan account): ')
+        CAT=input('Enter Updated Account Type(s for saving account, c for current account, cc, od, l for loan account): ')
         t=CAT,upd_id
         q='update Account_info set Account_type=%s where Cust_id=%s;'
         cur.execute(q,t)
         cur.execute('commit')
     elif updfield==8:
-        CBC=input('Enter Updated Credit balance: ')
+        CBC=input('Enter Updated Credit Balance: ')
         t=CBC,upd_id
         q='update Account_info set Balance_cr=%s where Cust_id=%s;'
         cur.execute(q,t)
         cur.execute('commit')
     elif updfield==9:
-        CBD=input('Enter Updated Debit balance: ')
+        CBD=input('Enter Updated Debit Balance: ')
         t=CBD,upd_id
         q='update Account_info set Balance_dr=%s where Cust_id=%s;'
         cur.execute(q,t)
@@ -142,7 +142,7 @@ def C_deleting():
     print('==============================DELETE CUSTOMER INFO==============================')
     del_ask=input('Enter [C]ust_id or [N]ame to delete: ')
     if del_ask.upper()=='C':
-        del_id=input('Enter Cust_id to delete: ')
+        del_id=input('Enter Customer ID to delete: ')
         t=(del_id,)
         q='delete from Customer_info where Cust_id=%s;'
         cur.execute(q,t)
@@ -192,12 +192,12 @@ def E_inserting():
         cur.execute('insert into Emp (Emp_id,Name,Post,Mobile,Qualification,DOJ,Leave_entitled,Leave_availed) values(%s,%s,%s,%s,%s,STR_TO_DATE(%s,"%d-%m-%Y"),%s,%s)',t)
         cur.execute('commit')
         
-        mother=input('Employee mother name: ')
-        father=input('Employee father name: ')
+        mother=input('Employee Mother Name: ')
+        father=input('Employee Father Name: ')
         gen=input('Gender(M/F): ')
-        maritalStat=input('Marital status(M/UM): ')
+        maritalStat=input('Marital Status(M/UM): ')
         if maritalStat=='M':
-            spouse=input('Spouse name: ')
+            spouse=input('Spouse Name: ')
         elif maritalStat=='UM':
             spouse='NA'
         t1=eid,mother,father,gen,maritalStat,spouse
@@ -209,32 +209,32 @@ def E_inserting():
 #SEARCHING EMPLOYEE INFO
 def E_searching():
     print('==============================SEARCH EMPLOYEE INFO==============================')
-    print('What do want to search?\n[E]mp_id,[N]ame,[M]obile: ')
+    print('What do want to search with?\n[E]mp_id,[N]ame,[M]obile: ')
     ser=input()
     if ser.upper()=='E':
-        take_eid=input('Enter the Employee id: ')
+        take_eid=input('Enter Employee ID: ')
         t=(take_eid+'%',)
         q='select *,DATE_FORMAT(DOJ,"%d-%m-%Y") as DOJ from Emp,Emp_details where Emp.Emp_id=Emp_details.Emp_id and Emp.Emp_id = %s;'
         cur.execute(q,t)
         result=cur.fetchall()
         for i in result:
-            print('Emp_ID: ',i[0],'\nName: ',i[1],'\nPost: ',i[2],'\nMobile: ',i[3],'\nQualification: ',i[4],'\nDOJ: ',i[-1],'\nLeaves Entitled: ',i[6],'\nLeaves availed: ',i[7],'\nLeaves balance: ',i[8],'\nMother:',i[10],'\nFather: ',i[11],'\nGender: ',i[12],'\nMarital status: ',i[13],'\nSpouse: ',i[14])
+            print('Emp_ID: ',i[0],'\nName: ',i[1],'\nPost: ',i[2],'\nMobile: ',i[3],'\nQualification: ',i[4],'\nDOJ: ',i[-1],'\nLeaves Entitled: ',i[6],'\nLeaves Availed: ',i[7],'\nLeaves Balance: ',i[8],'\nMother:',i[10],'\nFather: ',i[11],'\nGender: ',i[12],'\nMarital Status: ',i[13],'\nSpouse: ',i[14])
     elif ser.upper()=='N':
-        take_name=input('Enter the name: ')
+        take_name=input('Enter Name: ')
         t=(take_name+'%',)
         q='select *,DATE_FORMAT(DOJ,"%d-%m-%Y") as DOJ from Emp,Emp_details where Emp.Emp_id=Emp_details.Emp_id and Emp.Name like %s;'
         cur.execute(q,t)
         result=cur.fetchall()
         for i in result:
-            print('Emp_ID: ',i[0],'\nName: ',i[1],'\nPost: ',i[2],'\nMobile: ',i[3],'\nQualification: ',i[4],'\nDOJ: ',i[-1],'\nLeaves Entitled: ',i[6],'\nLeaves availed: ',i[7],'\nLeaves balance: ',i[8],'\nMother:',i[10],'\nFather: ',i[11],'\nGender: ',i[12],'\nMarital status: ',i[13],'\nSpouse: ',i[14])
+            print('Emp_ID: ',i[0],'\nName: ',i[1],'\nPost: ',i[2],'\nMobile: ',i[3],'\nQualification: ',i[4],'\nDOJ: ',i[-1],'\nLeaves Entitled: ',i[6],'\nLeaves Availed: ',i[7],'\nLeaves Balance: ',i[8],'\nMother:',i[10],'\nFather: ',i[11],'\nGender: ',i[12],'\nMarital Status: ',i[13],'\nSpouse: ',i[14])
     elif ser.upper()=='M':
-        take_mob=input('Enter the Mobile: ')
+        take_mob=input('Enter Mobile: ')
         t=(take_mob,)
         q='select *,DATE_FORMAT(DOJ,"%d-%m-%Y") as DOJ from Emp,Emp_details where Emp.Emp_id=Emp_details.Emp_id and Emp.Mobile = %s;'
         cur.execute(q,t)
         result=cur.fetchall()
         for i in result:
-            print('Emp_ID: ',i[0],'\nName: ',i[1],'\nPost: ',i[2],'\nMobile: ',i[3],'\nQualification: ',i[4],'\nDOJ: ',i[-1],'\nLeaves Entitled: ',i[6],'\nLeaves availed: ',i[7],'\nLeaves balance: ',i[8],'\nMother:',i[10],'\nFather: ',i[11],'\nGender: ',i[12],'\nMarital status: ',i[13],'\nSpouse: ',i[14])
+            print('Emp_ID: ',i[0],'\nName: ',i[1],'\nPost: ',i[2],'\nMobile: ',i[3],'\nQualification: ',i[4],'\nDOJ: ',i[-1],'\nLeaves Entitled: ',i[6],'\nLeaves Availed: ',i[7],'\nLeaves Balance: ',i[8],'\nMother:',i[10],'\nFather: ',i[11],'\nGender: ',i[12],'\nMarital Status: ',i[13],'\nSpouse: ',i[14])
 
 
 #UPDATING EMPLOYEE INFO
@@ -244,7 +244,7 @@ def E_updating():
     result=cur.fetchall()
     for i in result:
         print(i)
-    upd_id=input('Enter Emp_id to update: ')
+    upd_id=input('Enter Emp_id to Update: ')
     updfield=int(input('What do you want to update(\n1.Name\n2.Post\n3.Mobile\n4.Qualification\n5.DOJ\n6.Leaves Entitled\n7.Leaves Availed\n8.Mother Name\n9.Father Name\n10.Gender\n11.Marital Status\n12.Spouse Name\n'))
     if updfield==1:
         EName=input('Enter Updated Name: ')
@@ -265,7 +265,7 @@ def E_updating():
         cur.execute(q,t)
         cur.execute('commit')
     elif updfield==4:
-        EQual=input('Enter Updated qualification: ')
+        EQual=input('Enter Updated Qualification: ')
         t=EQual,upd_id
         q='update Emp set Qualification=%s where Emp_id=%s;'
         cur.execute(q,t)
@@ -277,25 +277,25 @@ def E_updating():
         cur.execute(q,t)
         cur.execute('commit')
     elif updfield==6:
-        le=input('Enter Updated Leave entitled: ')
+        le=input('Enter Updated Leave Entitled: ')
         t=le,upd_id
         q='update Emp set Leave_entitled=%s where Emp_id=%s;'
         cur.execute(q,t)
         cur.execute('commit')
     elif updfield==7:
-        la=input('Enter updated Leave availed: ')
+        la=input('Enter updated Leave Availed: ')
         t=la,upd_id
         q='update Emp set Leave_availed=%s where Emp_id=%s;'
         cur.execute(q,t)
         cur.execute('commit')
     elif updfield==8:
-        MN=input('Enter Updated Mother name: ')
+        MN=input('Enter Updated Mother Name: ')
         t=MN,upd_id
         q='update Emp_details set Mother=%s where Emp_id=%s;'
         cur.execute(q,t)
         cur.execute('commit')
     elif updfield==9:
-        FN=input('Enter Updated Father name: ')
+        FN=input('Enter Updated Father Name: ')
         t=FN,upd_id
         q='update Emp_details set Father=%s where Emp_id=%s;'
         cur.execute(q,t)
@@ -307,7 +307,7 @@ def E_updating():
         cur.execute(q,t)
         cur.execute('commit')
     elif updfield==11:
-        MS=input('Enter Updated Marital status: ')
+        MS=input('Enter Updated Marital Status: ')
         if MS=='M':
             ES=input('Enter Spouse Name: ')
         t=MS,upd_id
@@ -331,13 +331,13 @@ def E_deleting():
     print('==============================DELETE EMPLOYEE INFO==============================')
     del_ask=input('Enter [E]mp_id or [N]ame to delete: ')
     if del_ask.upper()=='E':
-        del_id=input('Enter Emp_id to delete: ')
+        del_id=input('Enter Emp_id to Delete: ')
         t=(del_id,)
         q='delete from Emp where Emp_id=%s;'
         cur.execute(q,t)
         cur.execute('commit')
     elif del_ask.upper()=='N':
-        del_name=input('Enter Name to delete: ')
+        del_name=input('Enter Name to Delete: ')
         t=(del_name+'%',)
         q='delete from Emp where Name=%s;'
         cur.execute(q,t)
