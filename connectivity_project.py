@@ -16,6 +16,7 @@ cur.execute('create table if not exists Emp_details(Emp_id int(5),Mother varchar
 
 #VIEWING CUSTOMER INFO
 def C_View():
+    print('\n==============================VIEWING CUSTOMER INFO==============================\n')
     cur.execute('select *,DATE_FORMAT(DOB,"%d-%m-%Y") as DOB,DATE_FORMAT(Customer_since,"%d-%m-%Y") as Customer_since from Customer_info,Account_info where Customer_info.Cust_id=Account_info.Cust_id;')
     result=cur.fetchall()
     for i in result:
@@ -24,7 +25,7 @@ def C_View():
 
 #INSERTING CUSTOMER INFO
 def C_inserting():
-    print('==============================INSERT CUSTOMER INFO==============================')
+    print('\n==============================INSERT CUSTOMER INFO==============================\n')
     n=int(input('Enter Number of Records: '))
     for i in range(n):
 
@@ -50,7 +51,7 @@ def C_inserting():
 
 #SEARCHING CUSTOMER INFO
 def C_searching():
-    print('==============================SEARCH CUSTOMER INFO==============================')
+    print('\n==============================SEARCH CUSTOMER INFO==============================\n')
     print('What do want to search with?\n[C]ust_id,[N]ame,[M]obile: ')
     ser=input()
     if ser.upper()=='C':
@@ -81,7 +82,7 @@ def C_searching():
 
 #UPDATING CUSTOMER INFO
 def C_updating():
-    print('==============================UPDATE CUSTOMER INFO==============================')
+    print('\n==============================UPDATE CUSTOMER INFO==============================\n')
     cur.execute('select Cust_id,Name,Mobile from Customer_info;')
     result=cur.fetchall()
     for i in result:
@@ -147,7 +148,7 @@ def C_updating():
 
 #DELETING CUSTOMER INFO
 def C_deleting():
-    print('==============================DELETE CUSTOMER INFO==============================')
+    print('\n==============================DELETE CUSTOMER INFO==============================\n')
     del_ask=input('Enter [C]ust_id or [N]ame to delete: ')
     if del_ask.upper()=='C':
         del_id=input('Enter Customer ID to delete: ')
@@ -167,8 +168,8 @@ def C_deleting():
 #MENU FOR CUSTOMER        
 def Customer_menu():
     while 1:
-        print('\n==============================CUSTOMER MENU==============================')
-        print('\n[V]iew, [I]nsert, [S]earch, [U]pdate, [D]elete, [E]xit')
+        print('\n==============================CUSTOMER MENU==============================\n')
+        print('[V]iew, [I]nsert, [S]earch, [U]pdate, [D]elete, [E]xit')
         ask=input()
         if ask.upper()=='V':
             C_View()
@@ -186,6 +187,7 @@ def Customer_menu():
 
 #VIEWING EMPLOYEE INFO
 def E_View():
+    print('\n==============================VIEWING EMPLOYEE INFO==============================\n')
     cur.execute('select *,DATE_FORMAT(DOJ,"%d-%m-%Y") as DOJ from Emp,Emp_details where Emp.Emp_id=Emp_details.Emp_id;')
     result=cur.fetchall()
     for i in result:
@@ -194,7 +196,7 @@ def E_View():
 
 #INSERTING EMPLOYEE INFO
 def E_inserting():
-    print('==============================INSERT EMPLOYEE INFO==============================')
+    print('\n==============================INSERT EMPLOYEE INFO==============================\n')
     n=int(input('Enter Number of Records: '))
     for i in range(n):
 
@@ -226,7 +228,7 @@ def E_inserting():
 
 #SEARCHING EMPLOYEE INFO
 def E_searching():
-    print('==============================SEARCH EMPLOYEE INFO==============================')
+    print('\n==============================SEARCH EMPLOYEE INFO==============================\n')
     print('What do want to search with?\n[E]mp_id,[N]ame,[M]obile: ')
     ser=input()
     if ser.upper()=='E':
@@ -257,7 +259,7 @@ def E_searching():
 
 #UPDATING EMPLOYEE INFO
 def E_updating():
-    print('==============================UPDATE EMPLOYEE INFO==============================')
+    print('\n==============================UPDATE EMPLOYEE INFO==============================\n')
     cur.execute('select Emp_id,Name,Mobile from Emp;')
     result=cur.fetchall()
     for i in result:
@@ -346,7 +348,7 @@ def E_updating():
 
 #DELETING EMPLOYEE INFO 
 def E_deleting():
-    print('==============================DELETE EMPLOYEE INFO==============================')
+    print('\n==============================DELETE EMPLOYEE INFO==============================\n')
     del_ask=input('Enter [E]mp_id or [N]ame to delete: ')
     if del_ask.upper()=='E':
         del_id=input('Enter Emp_id to Delete: ')
@@ -366,8 +368,8 @@ def E_deleting():
 #MENU FOR EMPLOYEE
 def Employee_menu():
     while 1:
-        print('\n==============================EMPLOYEE MENU==============================')
-        print('\n[V]iew, [I]nsert, [S]earch, [U]pdate, [D]elete, [E]xit')
+        print('\n==============================EMPLOYEE MENU==============================\n')
+        print('[V]iew, [I]nsert, [S]earch, [U]pdate, [D]elete, [E]xit')
         ask=input()
         if ask.upper()=='V':
             E_View()
@@ -385,13 +387,13 @@ def Employee_menu():
 
 #MAIN MENU
 while True:
-    print('\n==============================MAIN MENU==============================')
+    print('\n==============================MAIN MENU==============================\n')
     ask=input('[C]ustomer Menu , [E]mployee Menu ,[I]nformation Analysis, [Q]uit: ')
     if ask.upper()=='C':
         Customer_menu()
     elif ask.upper()=='E':
         Employee_menu()
     elif ask.upper()=='Q':
-        print('Thanks for using BANK MANAGEMENT SYSTEM.')
-        print('Made by *****ABHINAV GUPTA*****')
+        print('\nThanks for using BANK MANAGEMENT SYSTEM.')
+        print('Made by ABHINAV GUPTA')
         break
