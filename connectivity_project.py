@@ -217,7 +217,8 @@ def E_inserting():
         LE=input('No. of Leaves Entitled: ')
         LA=input('No. of Leaves Availed: ')
         t=eid,ename,post,emob,qual,edoj,LE,LA
-        cur.execute('insert into Emp (Emp_id,Name,Post,Mobile,Qualification,DOJ,Leave_entitled,Leave_availed) values(%s,%s,%s,%s,%s,STR_TO_DATE(%s,"%d-%m-%Y"),%s,%s)',t)
+        cur.execute('insert into Emp (Emp_id,Name,Post,Mobile,Qualification,DOJ,Leave_entitled,Leave_availed)\
+                           values(%s,%s,%s,%s,%s,STR_TO_DATE(%s,"%d-%m-%Y"),%s,%s)',t)
         cur.execute('commit')
         mother=input('Employee Mother Name: ')
         father=input('Employee Father Name: ')
